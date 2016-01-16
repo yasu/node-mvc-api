@@ -1,0 +1,23 @@
+{
+  "name": "node-mvc-api",
+  "version": "1.0.0",
+  "description": "A simple Node.js module, which provides an object oriented wrapper for the MVC-online API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yasu/node-mvc-api.git"
+  },
+  "author": "Yasuhiro Manai <yasuhiro.manai@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yasu/node-mvc-api/issues"
+  },
+  "homepage": "https://github.com/yasu/node-mvc-api#readme",
+  "dependencies": {
+    "oauth": "^0.9.14",
+    "request": "^2.65.0"
+  }
+}
