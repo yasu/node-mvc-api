@@ -16,7 +16,7 @@
 
 "use strict";
 
-var VERSION = "0.0.1",
+var VERSION = "1.0.0",
   querystring = require("querystring"),
   oauth = require("oauth"),
   oauth2 = oauth.OAuth2,
@@ -38,6 +38,7 @@ var MVC = function(clientId, clientSecret, redirectUri, opt_opts) {
 
   return this;
 };
+MVC.VERSION = VERSION;
 
 /**
  * Generates URL for consent page landing.
