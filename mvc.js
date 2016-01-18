@@ -16,7 +16,7 @@
 
 "use strict";
 
-var VERSION = "1.0.0",
+var VERSION = "1.0.2",
   querystring = require("querystring"),
   oauth = require("oauth"),
   oauth2 = oauth.OAuth2,
@@ -65,8 +65,6 @@ MVC.prototype.generateAuthUrl = function(opt_opts) {
  * @param  {Function} callback.
  */
 MVC.prototype.getToken = function(code, callback) {
-  console.log(this.redirectUri_);
-
   this.oa.getOAuthAccessToken(
     code,
     {'grant_type': 'authorization_code', 'redirect_uri': this.redirectUri_},
@@ -87,7 +85,7 @@ MVC.prototype.getToken = function(code, callback) {
  * @param {String} params
  */
 MVC.prototype.verifyCredentials = function(accessToken, callback, params) {
-  var url = baseUrl + "me.json";
+  var url = baseUrl + "me";
   if (params) {
     url += '?' + querystring.stringify(params);
   }
@@ -107,7 +105,7 @@ MVC.prototype.verifyCredentials = function(accessToken, callback, params) {
 
 // Communities
 MVC.prototype.communities = function(accessToken, callback, params) {
-  var url = baseUrl + "communities.json";
+  var url = baseUrl + "communities";
   if (params) {
     url += '?' + querystring.stringify(params);
   }
@@ -125,13 +123,11 @@ MVC.prototype.communities = function(accessToken, callback, params) {
 };
 
 // Upload
-MVC.prototype.uploadMedia = function(params, accessToken, callback) {
+MVC.prototype.upload = function(params, accessToken, callback) {
   var r = request.post({
     url: baseUrl + "upload",
-    oauth: {
-      consumer_key: this.clientId_,
-      consumer_secret: this.clientSecret_,
-      token: accessToken
+    auth: {
+      bearer: accessToken
     }
   }, function(error, response, body) {
     if (error) {
@@ -145,14 +141,12 @@ MVC.prototype.uploadMedia = function(params, accessToken, callback) {
     }
   });
 
-  var parameter = (params.isBase64) ? "media_data" : "media";
-
   // multipart/form-data
   var form = r.form();
-  if (fs.existsSync(params.media)) {
-    form.append(parameter, fs.createReadStream(params.media));
+  if (fs.existsSync(params.file)) {
+    form.append('file', fs.createReadStream(params.file));
   } else {
-    form.append(parameter, params.media);
+    form.append('file', params.file);
   }
 };
 
