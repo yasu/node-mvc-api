@@ -1,6 +1,6 @@
 {
   "name": "node-mvc-api",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A simple Node.js module, which provides an object oriented wrapper for the MVC-online API",
   "main": "index.js",
   "scripts": {
