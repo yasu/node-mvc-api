@@ -16,12 +16,13 @@
 
 "use strict";
 
-var VERSION = "1.0.2",
+var VERSION = "1.0.4",
   querystring = require("querystring"),
   oauth = require("oauth"),
   oauth2 = oauth.OAuth2,
   request = require("request"),
-  fs = require("fs");
+  fs = require("fs"),
+  _ = require('lodash');
 
 var baseUrl = "https://www.mvc-online.com/api/";
 var authUrl = "https://www.mvc-online.com/oauth/authorize/";
@@ -125,13 +126,13 @@ MVC.prototype.communities = function(accessToken, callback, params) {
 // Upload
 MVC.prototype.upload = function(params, accessToken, callback) {
   var r = request.post({
-    url: baseUrl + "upload",
+    url: baseUrl + "upload?" + querystring.stringify(_.omit(params, ['file'])),
     auth: {
       bearer: accessToken
     }
   }, function(error, response, body) {
     if (error) {
-      callback(error, body, response, baseUrl + "upload?" + querystring.stringify(params));
+      callback(error, body, response, baseUrl + "upload?" + querystring.stringify(_.omit(params, ['file'])));
     } else {
       try {
         callback(null, JSON.parse(body), response);
