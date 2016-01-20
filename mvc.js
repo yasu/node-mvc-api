@@ -26,6 +26,7 @@ var VERSION = "1.0.5",
 
 var baseUrl = "https://www.mvc-online.com/api/";
 var authUrl = "https://www.mvc-online.com/oauth/authorize/";
+var EventEmitter = require('events').EventEmitter;
 
 var MVC = function(clientId, clientSecret, redirectUri, opt_opts) {
   this.clientId_ = clientId;
@@ -131,6 +132,7 @@ MVC.prototype.upload = function(params, accessToken, callback) {
       bearer: accessToken
     }
   }, function(error, response, body) {
+    clearInterval(progress_interval);
     if (error) {
       callback(error, body, response, baseUrl + "upload?" + querystring.stringify(_.omit(params, ['file'])));
     } else {
@@ -149,6 +151,14 @@ MVC.prototype.upload = function(params, accessToken, callback) {
   } else {
     form.append('file', params.file);
   }
+
+  var ev = new EventEmitter;
+  var progress;
+  var progress_interval = setInterval(function() {
+    progress = r.req.connection._bytesDispatched / r.headers['content-length'];
+    ev.emit('progress', progress);
+  }, 250);
+  return ev;
 };
 
 
