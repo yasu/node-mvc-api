@@ -28,6 +28,8 @@ var VERSION = "1.0.6",
 var baseUrl = "https://www.mvc-online.com/api/";
 var authUrl = "https://www.mvc-online.com/oauth/authorize/";
 
+var r; // = request({})
+
 var MVC = function(clientId, clientSecret, redirectUri, opt_opts) {
   this.clientId_ = clientId;
   this.clientSecret_ = clientSecret;
@@ -126,7 +128,7 @@ MVC.prototype.communities = function(accessToken, callback, params) {
 
 // Upload
 MVC.prototype.upload = function(params, accessToken, callback) {
-  var r = request.post({
+  r = request.post({
     url: baseUrl + "upload?" + querystring.stringify(_.omit(params, ['file'])),
     auth: {
       bearer: accessToken
@@ -159,6 +161,10 @@ MVC.prototype.upload = function(params, accessToken, callback) {
     ev.emit('progress', progress);
   }, 250);
   return ev;
+};
+
+MVC.prototype.cancelUpload = function() {
+  if (r) r.end();
 };
 
 
